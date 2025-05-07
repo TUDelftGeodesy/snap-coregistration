@@ -144,10 +144,10 @@
       <displayPosition x="233.0" y="123.0"/>
     </node>
     <node id="Interferogram">
-      <displayPosition x="339.0" y="123.0"/>
+      <displayPosition x="431.0" y="123.0"/>
     </node>
     <node id="TOPSAR-Deburst">
-      <displayPosition x="456.0" y="123.0"/>
+      <displayPosition x="528.0" y="123.0"/>
     </node>
   </applicationData>
 </graph>
