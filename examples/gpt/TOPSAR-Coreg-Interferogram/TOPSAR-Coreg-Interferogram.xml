@@ -7,10 +7,10 @@
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <subswath>${subswath}</subswath>
-      <selectedPolarisations/>
+      <selectedPolarisations>${selectedPolarisations}</selectedPolarisations>
       <firstBurstIndex>${firstBurstIndex}</firstBurstIndex>
       <lastBurstIndex>${lastBurstIndex}</lastBurstIndex>
-      <wktAoi/>
+      <wktAoi>${wktAoi}</wktAoi>
     </parameters>
   </node>
   <node id="TOPSAR-Split(2)">
@@ -20,10 +20,10 @@
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <subswath>${subswath}</subswath>
-      <selectedPolarisations/>
+      <selectedPolarisations>${selectedPolarisations}</selectedPolarisations>
       <firstBurstIndex>${firstBurstIndex}</firstBurstIndex>
       <lastBurstIndex>${lastBurstIndex}</lastBurstIndex>
-      <wktAoi/>
+      <wktAoi>${wktAoi}</wktAoi>
     </parameters>
   </node>
   <node id="Apply-Orbit-File">
