@@ -123,6 +123,23 @@
       <selectedPolarisations/>
     </parameters>
   </node>
+  <node id="Subset">
+    <operator>Subset</operator>
+    <sources>
+      <sourceProduct refid="TOPSAR-Deburst"/>
+    </sources>
+    <parameters>
+      <sourceBands/>
+      <tiePointGrids/>
+      <region/>
+      <referenceBand/>
+      <geoRegion>${wktAoi}</geoRegion>
+      <subSamplingX>1</subSamplingX>
+      <subSamplingY>1</subSamplingY>
+      <fullSwath>false</fullSwath>
+      <copyMetadata>false</copyMetadata>
+    </parameters>
+  </node>
   <applicationData id="Presentation">
     <Description/>
     <node id="TOPSAR-Split">
@@ -148,6 +165,9 @@
     </node>
     <node id="TOPSAR-Deburst">
       <displayPosition x="528.0" y="123.0"/>
+    </node>
+    <node id="Subset">
+      <displayPosition x="645.0" y="123.0"/>
     </node>
   </applicationData>
 </graph>
