@@ -12,4 +12,4 @@ The parameters that sets the maximum number of threads used by GPT is `q` (set i
 | 2 | 948         | 1.4                       |
 | 4 | 764         | 1.7                       |
 | 6 | 490         | 2.6                       |
-| 8 |          |                          |
+| 8 | 419         | 3.1                       |
