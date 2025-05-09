@@ -1,10 +1,10 @@
-# Parallelism for coregistration and interferogram generation
+# Investigating parallelism
 
-Tests are based on one example (see [here](../TOPSAR-Coreg-Interferogram) for more information), but we have increased the AoI to cover 4 bursts.
+Tests are based on one example that involves the coregistration of two S1 scenes and the interferogram generation (see [here](../TOPSAR-Coreg-Interferogram) for more information). Differences involve a larger AoI and a different output file format.
 
 SNAP (GPT) implements tile parallelism for some of the tasks: datasets are split in tiles (by default, 512x512) and calculations are run in parallel over tiles using multithreading.
 
-Timing setting different values for `-q=` ("maximum parallelism used for the computation"), which should set the maximum number of threads used by GPT.
+The parameters that sets the maximum number of threads used by GPT is `q` (set in command line via the `-q` option). For the tests in this folder, we obtain the following timings:
 
 | q | Timings (s) | Speedup (compared to q=1) |
 |---|-------------|---------------------------|
