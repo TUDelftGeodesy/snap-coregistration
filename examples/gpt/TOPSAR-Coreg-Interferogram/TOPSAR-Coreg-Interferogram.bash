@@ -10,15 +10,18 @@ properties=TOPSAR-Coreg-Interferogram.properties
 sourceDir=/project/caroline/Data/radar_data/sentinel1/s1_asc_t088/
 sourcePath1=${sourceDir}/IW_SLC__1SDV_VVVH/20250416/S1A_IW_SLC__1SDV_20250416T172546_20250416T172614_058785_074873_228C.zip
 sourcePath2=${sourceDir}/IW_SLC__1SDV_VVVH/20250428/S1A_IW_SLC__1SDV_20250428T172547_20250428T172614_058960_074FA0_4F0C.zip
-targetDir=./
-targetPath=${targetDir}/coreg.znap
-format=ZNAP
+outDir=./
+date1=16Apr2025
+date2=28Apr2025
+interferogramOut=${outDir}/interferogram.znap
+heightToPhaseOut=${outDir}/heightToPhase.znap
+formatName=
 userdir=${TMPDIR}  # save auxiliary data to local disk
 
 module load snap
 
 # print diagnostics information
-gpt -q ${SLURM_CPUS_PER_TASK} --diag 
+gpt -q ${SLURM_CPUS_PER_TASK} --diag
 
 echo "### Starting graph execution on `date` ###"
 echo "Running with max parallelism q=${SLURM_CPUS_PER_TASK}"
@@ -31,7 +34,10 @@ time gpt \
   -e -p ${properties} \
   -Ssource1=${sourcePath1} \
   -Ssource2=${sourcePath2} \
-  -t ${targetPath} \
-  -f ${format}
+  -Pdate1=${date1} \
+  -Pdate1=${date2} \
+  -PinterferogramOut=${interferogramOut} \
+  -PheightToPhaseOut=${heightToPhaseOut} \
+  -PformatName=${formatName}
 
 echo "### Ending graph execution on `date` ###"
