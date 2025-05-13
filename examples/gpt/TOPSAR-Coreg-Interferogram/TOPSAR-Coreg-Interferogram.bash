@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --time=00:30:00
+#SBATCH --time=01:00:00
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=normal
 
@@ -13,9 +13,13 @@ sourcePath2=${sourceDir}/IW_SLC__1SDV_VVVH/20250428/S1A_IW_SLC__1SDV_20250428T17
 outDir=./
 date1=16Apr2025
 date2=28Apr2025
-interferogramOut=${outDir}/interferogram.znap
-heightToPhaseOut=${outDir}/heightToPhase.znap
-formatName=
+interferogramOut=${outDir}/interferogram.dim
+heightToPhaseOut=${outDir}/heightToPhase.dim
+formatName=BEAM-DIMAP
+# For the ESA-SNAP flavour of Zarr:
+# interferogramOut=${outDir}/interferogram.znap
+# heightToPhaseOut=${outDir}/heightToPhase.znap
+# formatName=ZNAP
 userdir=${TMPDIR}  # save auxiliary data to local disk
 
 module load snap
