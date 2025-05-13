@@ -39,7 +39,7 @@ time gpt \
   -Ssource1=${sourcePath1} \
   -Ssource2=${sourcePath2} \
   -Pdate1=${date1} \
-  -Pdate1=${date2} \
+  -Pdate2=${date2} \
   -PinterferogramOut=${interferogramOut} \
   -PheightToPhaseOut=${heightToPhaseOut} \
   -PformatName=${formatName}
