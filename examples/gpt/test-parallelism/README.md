@@ -1,6 +1,6 @@
 # Investigating parallelism
 
-Tests are based on one example that involves the coregistration of two S1 scenes and the interferogram generation (see [here](../TOPSAR-Coreg-Interferogram) for more information). Differences involve a larger AoI and a different output file format.
+The test is based on an example that involves the coregistration of two S1 scenes and the interferogram generation (see [here](../TOPSAR-Coreg-Interferogram) for more information).
 
 SNAP (GPT) implements tile parallelism for some of the tasks: datasets are split in tiles (by default, 512x512) and calculations are run in parallel over tiles using multithreading.
 
