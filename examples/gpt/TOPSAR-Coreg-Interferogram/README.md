@@ -10,8 +10,7 @@ Graphical representation of the Graph ([TOPSAR-Coreg-Interferogram.xml](./TOPSAR
 * `Apply-Orbit-File`: Download precise orbit data (if not available, restituted orbits are used).
 * `Back-Geocoding`: Run coregistration of the two (selection) scenes. A DEM data is downloaded (or a local one can be used).
 * `Enhanced-Spectral-Diversity`: Run the Network Enhanced Spectral Diversity (NESD) algorithm for TOPS coregistration.
-* `Interferogram`: Calculate the interferogram. Note that we run the interferogram node twice, once with `subtractFlatEarthPhase` and `subtractTopographicPhase` set to TRUE (`Interferogram`), and once with both variables set to FALSE (`Interferogram(2)`).
-* `BandMaths`: Calculate the difference between the two interferograms, estimating the height-to-phase factor.
+* `Interferogram`: Calculate the interferogram. 
 * `TOPSAR-Deburst`: Merge the selected bursts into a raster image, dropping overlaps. **It fails if the workflow acts on a single burst**.
 * *(not implemented)* `TOPSAR-Merge`: Debursted rasters from different subswaths can be merged at this point.
 * `Subset`: Crop the raster band(s) to the AoI.
