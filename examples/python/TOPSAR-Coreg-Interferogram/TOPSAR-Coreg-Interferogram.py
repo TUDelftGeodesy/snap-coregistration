@@ -85,6 +85,7 @@ def get_graph(mother_path, daughter_path, aoi_wkt, bursts,
                    node_id=f"back-geocoding-{swath}",
                    source=[f"apply-orbit-file-mother-{swath}",
                            f"apply-orbit-file-daughter-{swath}"])
+        # TODO: does ESD make sense if we have a single burst?
         g.add_node(operator=Operator("Enhanced-Spectral-Diversity"),
                    node_id=f"enhanced-spectral-diversity-{swath}",
                    source=f"back-geocoding-{swath}")
