@@ -125,10 +125,10 @@
       <srpNumberPoints>501</srpNumberPoints>
       <orbitDegree>3</orbitDegree>
       <includeCoherence>true</includeCoherence>
-          <squarePixel>true</squarePixel>
+      <squarePixel>true</squarePixel>
       <cohWinAz>2</cohWinAz>
       <cohWinRg>10</cohWinRg>
-          <subtractTopographicPhase>false</subtractTopographicPhase>
+      <subtractTopographicPhase>false</subtractTopographicPhase>
       <demName>Copernicus 30m Global DEM</demName>
       <externalDEMFile/>
       <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
