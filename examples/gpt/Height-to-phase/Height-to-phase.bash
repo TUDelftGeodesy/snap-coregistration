@@ -15,8 +15,9 @@ date1=16Apr2025
 date2=28Apr2025
 formatName=BEAM-DIMAP
 h2phOut=${outDir}/h2ph.dim
-ifgs_srd_out=${outDir}/ifgs_srd.dim
-ifgs_srp_out=${outDir}/ifgs_srp.dim
+# Interferograms with/without topographic phase only to debug
+# ifgs_srd_out=${outDir}/ifgs_srd.dim
+# ifgs_srp_out=${outDir}/ifgs_srp.dim
 userdir=${TMPDIR}  # save auxiliary data to local disk
 
 module load snap
@@ -38,6 +39,6 @@ time gpt \
   -Pdate1=${date1} \
   -Pdate2=${date2} \
   -PformatName=${formatName} \
-  -Ph2phOut=${h2phOut} -Pifgs_srd_out=${ifgs_srd_out} -Pifgs_srp_out=${ifgs_srp_out}
+  -Ph2phOut=${h2phOut} #-Pifgs_srd_out=${ifgs_srd_out} -Pifgs_srp_out=${ifgs_srp_out}
 
 echo "### Ending graph execution on `date` ###"
