@@ -155,7 +155,7 @@
           phase_height = angle(ifgs_srd * conj(ifgs_srp)) = angle(real(ifgs_srd)*real(ifgs_srp) + imag(ifgs_srd)*imag(ifgs_srp) + i (imag(ifgs_srd)*real(ifgs_srp) - real(ifgs_srd)*imag(ifgs_srp)))
           h2ph = phase_height / H / (4 * pi / wavelength)
             -->
-          <expression>phase($1.i_ifg_${subswath}_VV_${date1}_${date2} * $2.i_ifg_${subswath}_VV_${date1}_${date2} + $1.q_ifg_${subswath}_VV_${date1}_${date2} * $2.q_ifg_${subswath}_VV_${date1}_${date2}, $1.q_ifg_${subswath}_VV_${date1}_${date2} * $2.i_ifg_${subswath}_VV_${date1}_${date2} - $1.i_ifg_${subswath}_VV_${date1}_${date2} * $2.q_ifg_${subswath}_VV_${date1}_${date2})  / $2.elevation / (4 * PI / wavelength) </expression>
+          <expression>phase($1.i_ifg_${subswath}_VV_${date1}_${date2} * $2.i_ifg_${subswath}_VV_${date1}_${date2} + $1.q_ifg_${subswath}_VV_${date1}_${date2} * $2.q_ifg_${subswath}_VV_${date1}_${date2}, $1.q_ifg_${subswath}_VV_${date1}_${date2} * $2.i_ifg_${subswath}_VV_${date1}_${date2} - $1.i_ifg_${subswath}_VV_${date1}_${date2} * $2.q_ifg_${subswath}_VV_${date1}_${date2})  / $1.elevation / (4 * PI / wavelength) </expression>
           <description/>
           <unit>real</unit>
           <noDataValue>0.0</noDataValue>
