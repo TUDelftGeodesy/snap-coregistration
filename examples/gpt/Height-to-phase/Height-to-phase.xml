@@ -1,0 +1,253 @@
+<graph id="Graph">
+  <version>1.0</version>
+  <node id="TOPSAR-Split">
+    <operator>TOPSAR-Split</operator>
+    <sources>
+      <source>${source1}</source>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <subswath>${subswath}</subswath>
+      <selectedPolarisations>${selectedPolarisations}</selectedPolarisations>
+      <firstBurstIndex>${firstBurstIndex}</firstBurstIndex>
+      <lastBurstIndex>${lastBurstIndex}</lastBurstIndex>
+      <wktAoi>${wktAoi}</wktAoi>
+    </parameters>
+  </node>
+  <node id="TOPSAR-Split(2)">
+    <operator>TOPSAR-Split</operator>
+    <sources>
+      <source>${source2}</source>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <subswath>${subswath}</subswath>
+      <selectedPolarisations>${selectedPolarisations}</selectedPolarisations>
+      <firstBurstIndex>${firstBurstIndex}</firstBurstIndex>
+      <lastBurstIndex>${lastBurstIndex}</lastBurstIndex>
+      <wktAoi>${wktAoi}</wktAoi>
+    </parameters>
+  </node>
+  <node id="Apply-Orbit-File">
+    <operator>Apply-Orbit-File</operator>
+    <sources>
+      <sourceProduct refid="TOPSAR-Split"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <orbitType>Sentinel Precise (Auto Download)</orbitType>
+      <polyDegree>3</polyDegree>
+      <continueOnFail/>
+    </parameters>
+  </node>
+  <node id="Apply-Orbit-File(2)">
+    <operator>Apply-Orbit-File</operator>
+    <sources>
+      <sourceProduct refid="TOPSAR-Split(2)"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <orbitType>Sentinel Precise (Auto Download)</orbitType>
+      <polyDegree>3</polyDegree>
+      <continueOnFail/>
+    </parameters>
+  </node>
+  <node id="Back-Geocoding">
+    <operator>Back-Geocoding</operator>
+    <sources>
+      <sourceProduct refid="Apply-Orbit-File"/>
+      <sourceProduct.1 refid="Apply-Orbit-File(2)"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <demName>Copernicus 30m Global DEM</demName>
+      <demResamplingMethod>BILINEAR_INTERPOLATION</demResamplingMethod>
+      <externalDEMFile/>
+      <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
+      <resamplingType>BILINEAR_INTERPOLATION</resamplingType>
+      <maskOutAreaWithoutElevation>true</maskOutAreaWithoutElevation>
+      <outputRangeAzimuthOffset>false</outputRangeAzimuthOffset>
+      <outputDerampDemodPhase>false</outputDerampDemodPhase>
+      <disableReramp>false</disableReramp>
+    </parameters>
+  </node>
+  <node id="Enhanced-Spectral-Diversity">
+    <operator>Enhanced-Spectral-Diversity</operator>
+    <sources>
+      <sourceProduct refid="Back-Geocoding"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <fineWinWidthStr>512</fineWinWidthStr>
+      <fineWinHeightStr>512</fineWinHeightStr>
+      <fineWinAccAzimuth>16</fineWinAccAzimuth>
+      <fineWinAccRange>16</fineWinAccRange>
+      <fineWinOversampling>128</fineWinOversampling>
+      <xCorrThreshold>0.1</xCorrThreshold>
+      <cohThreshold>0.3</cohThreshold>
+      <numBlocksPerOverlap>10</numBlocksPerOverlap>
+      <esdEstimator>Periodogram</esdEstimator>
+      <weightFunc>Inv Quadratic</weightFunc>
+      <temporalBaselineType>Number of images</temporalBaselineType>
+      <maxTemporalBaseline>4</maxTemporalBaseline>
+      <integrationMethod>L1 and L2</integrationMethod>
+      <doNotWriteTargetBands>false</doNotWriteTargetBands>
+      <useSuppliedRangeShift>false</useSuppliedRangeShift>
+      <overallRangeShift>0.0</overallRangeShift>
+      <useSuppliedAzimuthShift>false</useSuppliedAzimuthShift>
+      <overallAzimuthShift>0.0</overallAzimuthShift>
+    </parameters>
+  </node>
+  <!-- Interferogram with subtracted reference phase, flat earth phase = true, topographic phase = true -->
+  <node id="ifgs_srd">
+    <operator>Interferogram</operator>
+    <sources>
+      <sourceProduct refid="Enhanced-Spectral-Diversity"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <subtractFlatEarthPhase>true</subtractFlatEarthPhase>
+      <srpPolynomialDegree>5</srpPolynomialDegree>
+      <srpNumberPoints>501</srpNumberPoints>
+      <orbitDegree>3</orbitDegree>
+      <includeCoherence>false</includeCoherence>
+      <squarePixel>true</squarePixel>
+      <cohWinAz>2</cohWinAz>
+      <cohWinRg>10</cohWinRg>
+      <subtractTopographicPhase>true</subtractTopographicPhase>
+      <demName>Copernicus 30m Global DEM</demName>
+      <externalDEMFile/>
+      <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
+      <externalDEMApplyEGM/>
+      <tileExtensionPercent>100</tileExtensionPercent>
+      <outputElevation>true</outputElevation>
+      <outputLatLon>true</outputLatLon>
+    </parameters>
+  </node>
+  <!-- Interferogram with subtracted reference phase, flat earth phase = true, topographic phase = false -->
+  <node id="ifgs_srp">
+    <operator>Interferogram</operator>
+    <sources>
+      <sourceProduct refid="Enhanced-Spectral-Diversity"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <subtractFlatEarthPhase>true</subtractFlatEarthPhase>
+      <srpPolynomialDegree>5</srpPolynomialDegree>
+      <srpNumberPoints>501</srpNumberPoints>
+      <orbitDegree>3</orbitDegree>
+      <includeCoherence>false</includeCoherence>
+      <squarePixel>true</squarePixel>
+      <cohWinAz>2</cohWinAz>
+      <cohWinRg>10</cohWinRg>
+      <subtractTopographicPhase>false</subtractTopographicPhase>
+      <demName>Copernicus 30m Global DEM</demName>
+      <externalDEMFile/>
+      <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
+      <externalDEMApplyEGM/>
+      <tileExtensionPercent>100</tileExtensionPercent>
+    </parameters>
+  </node>
+  <node id="BandMaths">
+    <operator>BandMaths</operator>
+    <sources>
+      <sourceProduct refid="ifgs_srd"/>
+      <sourceProduct.1 refid="ifgs_srp"/>
+    </sources>
+    <parameters>
+      <targetBands>
+        <targetBand>
+          <name>h2ph</name>
+          <type>float32</type>
+          <!--
+          phase_height = angle(ifgs_srd * conj(ifgs_srp)) = angle(real(ifgs_srd)*real(ifgs_srp) + imag(ifgs_srd)*imag(ifgs_srp) + i (imag(ifgs_srd)*real(ifgs_srp) - real(ifgs_srd)*imag(ifgs_srp)))
+          h2ph = phase_height / H / (4 * pi / wavelength)
+            -->
+          <expression>phase($1.i_ifg_${subswath}_VV_${date1}_${date2} * $2.i_ifg_${subswath}_VV_${date1}_${date2} + $1.q_ifg_${subswath}_VV_${date1}_${date2} * $2.q_ifg_${subswath}_VV_${date1}_${date2}, $1.q_ifg_${subswath}_VV_${date1}_${date2} * $2.i_ifg_${subswath}_VV_${date1}_${date2} - $1.i_ifg_${subswath}_VV_${date1}_${date2} * $2.q_ifg_${subswath}_VV_${date1}_${date2})  / $2.elevation / (4 * PI / wavelength) </expression>
+          <description/>
+          <unit>real</unit>
+          <noDataValue>0.0</noDataValue>
+          <spectralWavelength>0.0</spectralWavelength>
+          <spectralBandwidth>0.0</spectralBandwidth>
+        </targetBand>
+      </targetBands>
+      <variables>
+          <variable>
+              <name>wavelength</name>
+              <type>float32</type>
+              <value>0.05546576</value>
+          </variable>
+      </variables>
+    </parameters>
+  </node>
+  <node id="Write">
+    <operator>Write</operator>
+    <sources>
+      <sourceProduct refid="BandMaths"/>
+    </sources>
+    <parameters>
+      <file>${h2phOut}</file>
+      <formatName>${formatName}</formatName>
+      <deleteOutputOnFailure>true</deleteOutputOnFailure>
+      <writeEntireTileRows>false</writeEntireTileRows>
+      <clearCacheAfterRowWrite>false</clearCacheAfterRowWrite>
+    </parameters>
+  </node>
+  <node id="Write(2)">
+    <operator>Write</operator>
+    <sources>
+      <sourceProduct refid="ifgs_srd"/>
+    </sources>
+    <parameters>
+      <file>${ifgs_srd_out}</file>
+      <formatName>${formatName}</formatName>
+      <deleteOutputOnFailure>true</deleteOutputOnFailure>
+      <writeEntireTileRows>false</writeEntireTileRows>
+      <clearCacheAfterRowWrite>false</clearCacheAfterRowWrite>
+    </parameters>
+  </node>
+  <node id="Write(3)">
+    <operator>Write</operator>
+    <sources>
+      <sourceProduct refid="ifgs_srp"/>
+    </sources>
+    <parameters>
+      <file>${ifgs_srp_out}</file>
+      <formatName>${formatName}</formatName>
+      <deleteOutputOnFailure>true</deleteOutputOnFailure>
+      <writeEntireTileRows>false</writeEntireTileRows>
+      <clearCacheAfterRowWrite>false</clearCacheAfterRowWrite>
+    </parameters>
+  </node>
+  <applicationData id="Presentation">
+    <Description/>
+    <node id="TOPSAR-Split">
+      <displayPosition x="16.0" y="50.0"/>
+    </node>
+    <node id="TOPSAR-Split(2)">
+      <displayPosition x="11.0" y="194.0"/>
+    </node>
+    <node id="Apply-Orbit-File">
+      <displayPosition x="12.0" y="84.0"/>
+    </node>
+    <node id="Apply-Orbit-File(2)">
+      <displayPosition x="6.0" y="160.0"/>
+    </node>
+    <node id="Back-Geocoding">
+      <displayPosition x="116.0" y="123.0"/>
+    </node>
+    <node id="Enhanced-Spectral-Diversity">
+      <displayPosition x="233.0" y="123.0"/>
+    </node>
+    <node id="ifgs_srd">
+      <displayPosition x="431.0" y="160.0"/>
+    </node>
+    <node id="ifgs_srp">
+      <displayPosition x="431.0" y="84.0"/>
+    </node>
+    <node id="BandMaths">
+      <displayPosition x="556.0" y="123.0"/>
+    </node>
+    <node id="Write">
+      <displayPosition x="645.0" y="123.0"/>
+    </node>
+    <node id="Write(2)">
+      <displayPosition x="645.0" y="160.0"/>
+    </node>
+    <node id="Write(3)">
+      <displayPosition x="645.0" y="84.0"/>
+    </node>
+  </applicationData>
+</graph>
