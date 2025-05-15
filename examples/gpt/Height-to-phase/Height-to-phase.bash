@@ -38,6 +38,6 @@ time gpt \
   -Pdate1=${date1} \
   -Pdate2=${date2} \
   -PformatName=${formatName} \
-  -Ph2phOut=${interferogramOut} -Pifgs_srd_out=${ifgs_srd_out} -Pifgs_srp_out=${ifgs_srp_out}
+  -Ph2phOut=${h2phOut} -Pifgs_srd_out=${ifgs_srd_out} -Pifgs_srp_out=${ifgs_srp_out}
 
 echo "### Ending graph execution on `date` ###"
