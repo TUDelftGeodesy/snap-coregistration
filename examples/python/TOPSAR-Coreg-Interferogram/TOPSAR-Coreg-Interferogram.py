@@ -12,7 +12,7 @@ from snapista import Graph, Operator
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-m", "--mother-path", required=True, type=str)
-    parser.add_argument("-d", "--daughter-path", required=True, type=str)
+    parser.add_argument("-d", "--daughter-paths", required=True, type=str, nargs="+")
     parser.add_argument("-a", "--aoi-wkt", required=True, type=str)
     parser.add_argument("-o", "--output-path", default="./interferogram.dim", type=str)
     parser.add_argument("-f", "--output-format", default="BEAM-DIMAP", type=str)
@@ -61,18 +61,24 @@ def get_intersecting_bursts(scene_path, aoi_wkt):
     return bursts
 
 
-def get_graph(mother_path, daughter_path, aoi_wkt, bursts,
+def get_graph(mother_path, daughter_paths, aoi_wkt, bursts,
               output_path="./interferogram.dim", output_format="BEAM-DIMAP"):
     """ Build processing graph. """
     g = Graph()
 
+    # Load mother and (all of the) daughter scenes
     g.add_node(operator=Operator("Read", file=mother_path),
                node_id="read-mother")
-    g.add_node(operator=Operator("Read", file=daughter_path),
-               node_id="read-daughter")
+    for n, daughter_path in enumerate(daughter_paths):
+        g.add_node(operator=Operator("Read", file=daughter_path),
+                   node_id=f"read-daughter-{n}")
+
+    # Setup the coregistration and interferogram calculation for all relevant
+    # subswaths in all scenes
+    scenes = ("mother", *(f"daughter-{n}" for n in range(len(daughter_paths))))
     sources = []
     for swath, nbursts in bursts.items():
-        for scene in ("mother", "daughter"):
+        for scene in scenes:
             g.add_node(operator=Operator("TOPSAR-Split",
                                          subswath=swath,
                                          wktAoi=aoi_wkt),
@@ -83,15 +89,16 @@ def get_graph(mother_path, daughter_path, aoi_wkt, bursts,
                        source=f"topsar-split-{scene}-{swath}")
         g.add_node(operator=Operator("Back-Geocoding"),
                    node_id=f"back-geocoding-{swath}",
-                   source=[f"apply-orbit-file-mother-{swath}",
-                           f"apply-orbit-file-daughter-{swath}"])
+                   source=[f"apply-orbit-file-{scene}-{swath}"
+                           for scene in scenes])
         # TODO: does ESD make sense if we have a single burst?
         g.add_node(operator=Operator("Enhanced-Spectral-Diversity"),
                    node_id=f"enhanced-spectral-diversity-{swath}",
                    source=f"back-geocoding-{swath}")
         g.add_node(operator=Operator("Interferogram",
-                                     subtractFlatEarthPhase=True,
-                                     subtractTopographicPhase=True),
+                                     subtractFlatEarthPhase="false",
+                                     subtractTopographicPhase="false",
+                                     includeCoherence="false"),
                    node_id=f"interferogram-{swath}",
                    source=f"enhanced-spectral-diversity-{swath}")
         if nbursts > 1:
@@ -121,15 +128,15 @@ def get_graph(mother_path, daughter_path, aoi_wkt, bursts,
     return g
 
 
-def main(mother_path, daughter_path, aoi_wkt,
+def main(mother_path, daughter_paths, aoi_wkt,
          output_path="./interferogram.dim", output_format="BEAM-DIMAP",
          view=True, q=1):
     # Extract information on intersecting swaths/bursts from mother scene
-    # TODO: check that daughter scene has same intersections?
+    # TODO: check that daughter scenes has same intersections?
     bursts = get_intersecting_bursts(mother_path, aoi_wkt)
 
     # Build graph
-    graph = get_graph(mother_path, daughter_path, aoi_wkt, bursts, output_path, output_format)
+    graph = get_graph(mother_path, daughter_paths, aoi_wkt, bursts, output_path, output_format)
 
     # Print XML or process graph
     if view:
