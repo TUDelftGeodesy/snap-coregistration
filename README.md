@@ -4,9 +4,50 @@ This repository contains material to coregister Sentinel-1 IW SLC products using
 
 ## Installation
 
-For the regular installation (via GUI), one can download the OS-specific installer from [here](https://step.esa.int/main/download/snap-download/).
+### Workstation
 
-The installing procedure can also take care of installing the Python interface to SNAP. It should be enough to follow the given instructions, for more informations see [here](https://senbox.atlassian.net/wiki/spaces/SNAP/pages/3114106881/Installation+and+configuration+of+the+SNAP-Python+esa_snappy+interface+SNAP+version+12)
+On local workstations, one can follow the regular SNAP installation procedure (via GUI): download and run the OS-specific installer from [here](https://step.esa.int/main/download/snap-download/).
+
+The procedure also takes care of installing the Python interface to SNAP. It should be enough to follow the given instructions, for more informations see [here](https://senbox.atlassian.net/wiki/spaces/SNAP/pages/3114106881/Installation+and+configuration+of+the+SNAP-Python+esa_snappy+interface+SNAP+version+12)
+
+### Spider
+
+SNAP is installed and made available as a module on Spider. Make sure you can load modules from `/project/caroline/Software` by running:
+
+```shell
+module use /project/caroline/Software/modulefiles
+```
+
+SNAP can be used after running:
+
+```shell
+module load snap/12.0.0
+gpt -h  # test that the GPT command line tool is available
+```
+
+In order to install the Python interface to SNAP, we create a Python environment using `virtualenv`:
+
+```shell
+module load python/3.10  # base environment on python 3.10
+virtualenv venv
+source venv/bin/activate
+```
+
+Install and configure [ESA-SNAPPY](https://github.com/senbox-org/esa-snappy) as:
+
+```shell
+pip install esa-snappy
+cd venv/lib/python3.10/site-packages/esa_snappy
+python snappyutil.py --snap_home /project/caroline/Software/snap/12.0.0  --java_module /project/caroline/Software/snap/12.0.0/esasnappy/modules/eu-esa-snap-esa-snappy.jar --jvm_max_mem 32G --log_file ./snappyutil.log
+```
+
+In order to use ESA-SNAPPY, make sure all the required modules as well as the virtual environment are loaded:
+
+```shell
+module load snap/12.0.0
+module load python/3.10
+source venv/bin/activate
+```
 
 ## Examples
 
