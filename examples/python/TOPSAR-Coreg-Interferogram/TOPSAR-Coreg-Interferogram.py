@@ -142,7 +142,7 @@ def main(mother_path, daughter_paths, aoi_wkt,
     if view:
         graph.view()
     else:
-        graph.run(gpt_options=["-q", q])
+        graph.run(gpt_options=["-e", "-q", q])
 
 
 if __name__ == "__main__":
